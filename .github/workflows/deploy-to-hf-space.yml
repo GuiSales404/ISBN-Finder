@@ -1,0 +1,36 @@
+name: Deploy to Hugging Face Space
+
+on:
+    push:
+        branches:
+            - main  # ou a branch que você deseja monitorar
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout the repository
+              uses: actions/checkout@v3
+      
+            - name: Install git-lfs
+              run: |
+                sudo apt-get install git-lfs
+                git lfs install
+
+            - name: Push to Hugging Face Space
+            env:
+                HF_TOKEN: ${{ secrets.HF_TOKEN }}
+            run: |
+                git config --global user.email "actions@github.com"
+                git config --global user.name "GitHub Actions"
+
+                git clone https://huggingface.co/spaces/GuiSales404/ISBN-Finder space_repo
+
+                # Copia os arquivos do repositório atual para o space
+                rsync -av --exclude='.git' ./ space_repo/
+
+                cd space_repo
+                git add .
+                git commit -m "Deploy automático via GitHub Actions" || echo "Nada para commitar"
+                git push https://huggingface.co/GuiSales404:$HF_TOKEN@huggingface.co/spaces/GuiSales404/ISBN-Finder main

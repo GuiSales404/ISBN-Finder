@@ -2,6 +2,7 @@ import pandas as pd
 import unicodedata
 from tavily import TavilyClient
 import re
+import os
 
 def normalizar_coluna(nome_coluna):
     nome = unicodedata.normalize('NFKD', str(nome_coluna)).encode('ASCII', 'ignore').decode('utf-8')
@@ -67,7 +68,7 @@ def processar_arquivo_xlsx_para_csv(caminho_xlsx, caminho_csv_saida):
     print(f"✅ Arquivo CSV salvo em: {caminho_csv_saida}")
 
 def search(title:str, author:str, publisher:str) -> dict:
-    client = TavilyClient("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")
+    client = TavilyClient(os.getenv('TAVILY'))
     response = client.search(
         query=f"Qual o ISBN-10 ou ISBN-13 desse livro de título: {title}, do autor: {author} e editora: {publisher}. Retorne a resposta sem texto adicional apenas ISBN-10 e ISBN-13",
         include_answer="basic"
