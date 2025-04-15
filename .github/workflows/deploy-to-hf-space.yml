@@ -26,7 +26,7 @@ jobs:
           git config --global user.name "Your Name"
 
           # Clona o space (substitua com seu username e nome do space)
-          git clone https://huggingface.co/spaces/GuiSales404/ISBN-Finder space_repo
+          git clone https://huggingface.co/GuiSales404:$HF_TOKEN@huggingface.co/spaces/GuiSales404/ISBN-Finder space_repo space_repo
 
           # Copia os arquivos do repositório atual para o space
           rsync -av --exclude='.git' ./ space_repo/
